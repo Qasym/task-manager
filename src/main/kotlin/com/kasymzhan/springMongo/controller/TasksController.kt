@@ -3,6 +3,7 @@ package com.kasymzhan.springMongo.controller
 import com.kasymzhan.springMongo.model.Task
 import com.kasymzhan.springMongo.repository.TaskRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 class TasksController {
     @Autowired
     private val _taskRepository: TaskRepository? = null
+    private var _taskIds: Long = 0
 
     @GetMapping
     fun getTasks(model: Model): String {
@@ -32,11 +34,14 @@ class TasksController {
         return "task_creation"
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseBody
-    fun addTask(@RequestBody task: Task): ResponseEntity<Map<String, String>> {
-        println("creating task $task")
+    fun addTask(@RequestBody task: Task): HttpStatus {
+        while (_taskRepository?.findByIdOrNull(_taskIds) != null)
+            _taskIds++
+        task.id = _taskIds++
         _taskRepository?.save(task)
-        return ResponseEntity(emptyMap(), HttpStatus.CREATED)
+        println("saving task $task")
+        return HttpStatus.CREATED
     }
 }

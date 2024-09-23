@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale="1.0">
+    <title>Task Creation</title>
+</head>
+<body>
+    <div>
+        <a href="http://localhost:8989/">Home Page</a>
+        <br><br><br>
+    </div>
+<div>
+    <h1>Create a task</h1>
+    <form id="task-form">
+        <label for="title">Title:</label><br>
+        <input id="title" name="title" type="text" required><br><br>
+    
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" rows="4" cols="50"></textarea><br><br>
+    
+        <button id="create-task-button" type="submit">Create task</button>
+    </form>
+</div>
+</body>
+</html>
+
+<script>
+    const taskForm = document.getElementById("task-form")
+    taskForm.addEventListener("submit", function(event) {
+        event.preventDefault()
+        const title = document.getElementById("title").value
+        const description = document.getElementById("description").value
+        const data = {
+            id: 0,
+            title: title,
+            description: description,
+            isDone: false,
+        }
+        fetch("http://localhost:8989/tasks/create", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Success: ", data)
+            taskForm.reset()
+        })
+        .catch(error => {
+            console.log("Error: ", error)
+        })
+    })
+</script>

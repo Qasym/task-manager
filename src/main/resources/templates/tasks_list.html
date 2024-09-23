@@ -5,14 +5,20 @@
     <title>Tasks</title>
 </head>
 <body>
-<h1>Task List:</h1>
-<ol>
-    <li th:each="task : ${tasks}">
-        <span th:text="${task.title}">*title goes here*</span>
-        <br>
-        <span th:text="${task.description}">*description goes here*</span>
-        <input type="checkbox" th:checked="${task.isDone}"
-    </li>
-</ol>
+    <div>
+        <a href="http://localhost:8989/">Home Page</a>
+        <br><br><br>
+    </div>
+    <div>
+        <h1>Task List:</h1>
+        <ol>
+            <li th:each="task : ${tasks}">
+                <span th:text="${task.title}">*title goes here*</span>
+                <br>
+                <span th:text="${task.description}">*description goes here*</span>
+                <input type="checkbox" th:checked="${task.isDone}"
+            </li>
+        </ol>
+    </div>
 </body>
 </html>

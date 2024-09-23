@@ -4,8 +4,8 @@ import org.springframework.data.annotation.Id
 
 data class Task(
     @Id
-    val id: Int,
+    var id: Long = 0,
     var title: String,
-    var description: String,
-    var isDone: Boolean,
+    var description: String = "",
+    var isDone: Boolean = false,
 )
