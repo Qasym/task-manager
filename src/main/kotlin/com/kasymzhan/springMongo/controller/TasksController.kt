@@ -19,12 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody
 class TasksController {
     @Autowired
     private val _taskRepository: TaskRepository? = null
-    private var _taskIds: Long = 0
 
     @GetMapping
     fun getTasks(model: Model): String {
         val tasks = _taskRepository?.findAll() ?: emptyList()
-        tasks.forEach { println(it) }
         model.addAttribute("tasks", tasks)
         return "tasks_list"
     }
@@ -37,9 +35,6 @@ class TasksController {
     @PostMapping("/create")
     @ResponseBody
     fun addTask(@RequestBody task: Task): HttpStatus {
-        while (_taskRepository?.findByIdOrNull(_taskIds) != null)
-            _taskIds++
-        task.id = _taskIds++
         _taskRepository?.save(task)
         println("saving task $task")
         return HttpStatus.CREATED
