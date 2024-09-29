@@ -10,6 +10,22 @@
         <br><br><br>
     </div>
     <div>
+        <script>
+            function updateTaskStatus(taskId, checkbox) {
+                const isChecked = checkbox.checked;
+    
+                fetch(`http://localhost:8989/tasks/${taskId}/${isChecked}`, {
+                    method: 'PUT',
+                }).then(response => {
+                    if (!response.ok) {
+                        alert("Failed to update task status");
+                    }
+                }).catch(error => {
+                    console.error("Error updating task status:", error);
+                    alert("An error occurred while updating the task");
+                });
+            }
+        </script>
         <h1>Task List:</h1>
         <ol>
             <li th:each="task : ${tasks}">
@@ -17,6 +33,7 @@
                 <br>
                 <span th:text="${task.description}">*description goes here*</span>
                 <input type="checkbox" th:checked="${task.isDone}"
+                        th:onchange="updateTaskStatus([[${task.idString}]], this)"/>
             </li>
         </ol>
     </div>
