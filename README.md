@@ -17,4 +17,14 @@ Feel free to edit the looks and/or functionality of this application
 
 # How to test
 1. Clone the repo
-2. 
+2. Make sure you have MongoDB installed [guide I used](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)
+    - I you did not go with the default settings, make sure to change the `application.properties` file accordingly
+3. Open the cloned repo using Intellij Idea and run the `SpringApplication.kt`
+
+You should be able to see things running app on http://localhost:8989/
+
+# Future todos
+- Add user authentication
+- Beautify front end part of the app
+- Categories for the tasks
+- Priorities for the tasks
