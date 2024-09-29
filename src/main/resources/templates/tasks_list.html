@@ -28,6 +28,26 @@
                 });
             }
         </script>
+        <script>
+            function deleteTask(id) {
+                fetch(`http://localhost:8989/tasks/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Task deleted successfully');
+                        // Optionally, reload the page or remove the item from the DOM
+                        window.location.reload();
+                    } else {
+                        alert('Failed to delete the task');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred');
+                });
+            }
+        </script>
         <h1>Task List:</h1>
         <div th:if="${tasks.size != 0}">
             <ol>
@@ -51,6 +71,7 @@
                     <br th:if="${task.description.length != 0}"/>
                     <span th:if="${task.description.length != 0}" th:text="${task.description}" class="task-description"
                           th:style="${task.isDone} ? 'text-decoration: line-through;' : ''">*description goes here*</span>
+                    <a href="#" th:onclick='deleteTask([[${task.idString}]])'>Delete</a>
                 </li>
             </ol>
         </div>
