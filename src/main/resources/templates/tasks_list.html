@@ -31,9 +31,21 @@
         <h1>Task List:</h1>
         <div th:if="${tasks.size != 0}">
             <ol>
-                <li th:each="task : ${tasks}">
-                    <span th:if="${task.isDone}" th:text="${task.title}" class="task-title" style="text-decoration: line-through;">*title goes here*</span>
+                <li th:each="task : ${tasks}" th:if="${!task.isDone}">
                     <span th:if="${!task.isDone}" th:text="${task.title}" class="task-title">*title goes here*</span>
+                    <input type="checkbox" th:checked="${task.isDone}"
+                           th:onchange="updateTaskStatus([[${task.idString}]], this)"/>
+                    <br th:if="${task.description.length != 0}"/>
+                    <span th:if="${task.description.length != 0}" th:text="${task.description}" class="task-description"
+                          th:style="${task.isDone} ? 'text-decoration: line-through;' : ''">*description goes here*</span>
+                </li>
+            </ol>
+        </div>
+        <div th:if="${tasks.size != 0}">
+            <p>Completed tasks:</p>
+            <ol>
+                <li th:each="task : ${tasks}" th:if="${task.isDone}">
+                    <span th:if="${task.isDone}" th:text="${task.title}" class="task-title" style="text-decoration: line-through;">*title goes here*</span>
                     <input type="checkbox" th:checked="${task.isDone}"
                            th:onchange="updateTaskStatus([[${task.idString}]], this)"/>
                     <br th:if="${task.description.length != 0}"/>
