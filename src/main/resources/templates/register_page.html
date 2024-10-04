@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign up</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const registerButton = document.getElementById("register");
+            registerButton.addEventListener("click", function() {
+                const email = document.getElementById("email").value;
+                const pw1 = document.getElementById("password_1").value;
+                const pw2 = document.getElementById("password_2").value;
+                if (pw1 !== pw2) {
+                    // todo: notify that passwords don't match
+                    return
+                } else {
+                    const data = {
+                        email: email,
+                        password: pw1,
+                    };
+                    fetch("http://localhost:8989/register", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json;
+                        } else {
+                            throw new Error("Registration failed!")
+                        }
+                    })
+                    .then(data => {
+                        // todo: Handle data
+                    })
+                    .catch(error => {
+                        // todo: Notify about the error
+                    })
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <a href="http://localhost:8989">Click here to go back!</a>
+        <p>Register</p>
+    </div>
+    <div>
+        <input type="email" placeholder="email" id="email"><br>
+        <input type="password" placeholder="password" id="password_1"><br>
+        <input type="password" placeholder="type password again" id="password_2"><br>
+        <button type="button" id="register">Register</button>
+    </div>
+</body>
+</html>

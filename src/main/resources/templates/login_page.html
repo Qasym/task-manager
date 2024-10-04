@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign in</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginButton = document.getElementById("login");
+            loginButton.addEventListener("click", function () {
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                const data = {
+                    email: email,
+                    password: password
+                };
+                fetch("http://localhost:8989/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Login failed");
+                    }
+                })
+                .then(data => {
+                    console.log("Login successful:", data);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <a href="http://localhost:8989">Click here to go back!</a>
+        <p>Please enter your credentials</p>
+    </div>
+    <div>
+        <input type="email" placeholder="email" id="email">
+        <input type="password" placeholder="password" id="password">
+        <button type="button" id="login">Login</button>
+    </div>
+</body>
+</html>
