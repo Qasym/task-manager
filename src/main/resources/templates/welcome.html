@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Welcome</title>
@@ -9,8 +9,8 @@
   <p>Hi! Welcome to the task manager</p>
 </div>
 <div>
-  <a href="http://localhost:8989/login">Click here to sign in</a>
-  <a href="http://localhost:8989/register">Click here to register</a>
+  <a th:href="@{~/login}">Click here to sign in</a>
+  <a th:href="@{~/register}">Click here to register</a>
 </div>
 </body>
 </html>

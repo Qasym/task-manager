@@ -11,14 +11,4 @@ class IndexController {
     fun index(): String {
         return "welcome"
     }
-
-    @GetMapping("/register")
-    fun openRegistration(): String {
-        return "register_page"
-    }
-
-    @GetMapping("/login")
-    fun openLogin(): String {
-        return "login_page"
-    }
 }

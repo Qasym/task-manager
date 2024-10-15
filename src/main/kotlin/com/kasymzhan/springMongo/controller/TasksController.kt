@@ -2,6 +2,7 @@ package com.kasymzhan.springMongo.controller
 
 import com.kasymzhan.springMongo.model.Task
 import com.kasymzhan.springMongo.repository.TaskRepository
+import jakarta.servlet.http.HttpSession
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -26,7 +27,12 @@ class TasksController {
     private val _taskRepository: TaskRepository? = null
 
     @GetMapping
-    fun getTasks(model: Model): String {
+    fun getTasks(model: Model, session: HttpSession): String {
+        val username = session.getAttribute("username") as? String
+        if (username == null) {
+            println("username is null")
+            return "redirect:/login"
+        }
         val tasks = _taskRepository?.findAll() ?: emptyList()
         model.addAttribute("tasks", tasks)
         return "tasks_list"

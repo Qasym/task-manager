@@ -1,28 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Sign in</title>
     <script>
+        const url = "http://localhost:8989"
         document.addEventListener("DOMContentLoaded", function () {
             const loginButton = document.getElementById("login");
             loginButton.addEventListener("click", function () {
                 const email = document.getElementById("email").value;
                 const password = document.getElementById("password").value;
-                const data = {
+                const data = new URLSearchParams({
                     email: email,
                     password: password
-                };
-                fetch("http://localhost:8989/login", {
+                });
+                fetch(url + "/login", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: JSON.stringify(data)
+                    body: data.toString()
                 })
                 .then(response => {
                     if (response.ok) {
-                        return response.json();
+                        window.location.href = url + "/tasks"
                     } else {
                         throw new Error("Login failed");
                     }
@@ -39,7 +40,7 @@
 </head>
 <body>
     <div>
-        <a href="http://localhost:8989">Click here to go back!</a>
+        <a th:href="@{~/}">Click here to go back!</a>
         <p>Please enter your credentials</p>
     </div>
     <div>

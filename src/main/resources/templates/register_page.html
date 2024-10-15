@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Sign up</title>
     <script>
+        const url = "http://localhost:8989";
         document.addEventListener("DOMContentLoaded", function() {
             const registerButton = document.getElementById("register");
             registerButton.addEventListener("click", function() {
@@ -15,19 +16,22 @@
                     return
                 } else {
                     const data = {
-                        email: email,
+                        username: email,
                         password: pw1,
                     };
-                    fetch("http://localhost:8989/register", {
+                    const jsonBody = JSON.stringify(data);
+                    console.log("sending data " + jsonBody)
+                    fetch(url + "/register", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify(data)
+                        body: jsonBody,
                     })
                     .then(response => {
                         if (response.ok) {
-                            return response.json;
+                            console.log("successful response from POST request")
+                            window.location.href = url + "/tasks";
                         } else {
                             throw new Error("Registration failed!")
                         }
