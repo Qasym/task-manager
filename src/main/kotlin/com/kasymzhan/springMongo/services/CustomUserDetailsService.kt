@@ -5,19 +5,28 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.stereotype.Service
 
 @Service
 class CustomUserDetailsService(val userRepository: UserRepository) : UserDetailsService {
     override fun loadUserByUsername(username: String?): UserDetails {
-        if (username == null)
+        if (username.isNullOrBlank())
             throw Exception("Provided username is null")
         println("username is >$username<")
         val user = userRepository.findByUsername(username)
             ?: throw Exception("User: $username not found")
-        return User(
-            user.username,
-            user.password,
-            user.roles.map { SimpleGrantedAuthority(it) })
+        println("user $username is found")
+//        return User(
+//            user.username,
+//            user.password,
+//            user.roles.map { SimpleGrantedAuthority(it) })
+        val userDetails = User.withUsername(user.username)
+            .password(user.password)
+            .roles(user.roles.first())
+            .build()
+        println("user details: $userDetails")
+        return userDetails
     }
 }

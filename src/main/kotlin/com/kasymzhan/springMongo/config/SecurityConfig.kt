@@ -3,13 +3,11 @@ package com.kasymzhan.springMongo.config
 import com.kasymzhan.springMongo.services.CustomUserDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Role
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
@@ -20,28 +18,22 @@ class SecurityConfig(val userDetailsService: CustomUserDetailsService) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http.csrf { it.disable() }.authorizeHttpRequests { auth ->
-                auth.requestMatchers("/register", "/login", "/").permitAll()
-                    .anyRequest().authenticated()
-            }.formLogin { form ->
-                form.loginPage("/login").permitAll()
-            }.logout { logout ->
-                logout.permitAll()
+        http {
+            authorizeRequests {
+                authorize("/", permitAll)
+                authorize("/login", permitAll)
+                authorize("/register", permitAll)
+                authorize("/tasks", hasRole(Roles.USER))
+                authorize("/tasks/**", hasRole(Roles.USER))
             }
-        return http.build()
-    }
-
-    @Bean
-    fun userDetailsService(): UserDetailsService {
-        println("userDetailsService called")
-        val userList = userDetailsService.userRepository.findAll()
-        val userDetailsList = mutableListOf<UserDetails>()
-        for (user in userList) {
-            userDetailsList.add(User.withUsername(user.username)
-                .password(user.password)
-                .roles(user.roles.first())
-                .build())
+            formLogin {
+                loginPage = "/login"
+                defaultSuccessUrl("/tasks", true)
+            }
+            logout {
+                logoutUrl = "/logout" // ???
+            }
         }
-        return InMemoryUserDetailsManager(userDetailsList)
+        return http.build()
     }
 }

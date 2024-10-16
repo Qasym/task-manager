@@ -27,12 +27,7 @@ class TasksController {
     private val _taskRepository: TaskRepository? = null
 
     @GetMapping
-    fun getTasks(model: Model, session: HttpSession): String {
-        val username = session.getAttribute("username") as? String
-        if (username == null) {
-            println("username is null")
-            return "redirect:/login"
-        }
+    fun getTasks(model: Model): String {
         val tasks = _taskRepository?.findAll() ?: emptyList()
         model.addAttribute("tasks", tasks)
         return "tasks_list"
