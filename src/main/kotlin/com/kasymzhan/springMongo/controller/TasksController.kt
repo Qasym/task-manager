@@ -38,6 +38,11 @@ class TasksController {
         return "task_creation"
     }
 
+    @GetMapping("/home")
+    fun tasksHomePage(): String {
+        return "home"
+    }
+
     @PostMapping("/create")
     @ResponseBody
     fun addTask(@RequestBody task: Task): HttpStatus {
