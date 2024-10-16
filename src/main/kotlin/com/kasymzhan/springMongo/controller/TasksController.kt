@@ -2,12 +2,13 @@ package com.kasymzhan.springMongo.controller
 
 import com.kasymzhan.springMongo.model.Task
 import com.kasymzhan.springMongo.repository.TaskRepository
-import jakarta.servlet.http.HttpSession
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
-import kotlin.math.log
 
 @Controller
 @RequestMapping("/tasks")
@@ -27,9 +27,11 @@ class TasksController {
     private val _taskRepository: TaskRepository? = null
 
     @GetMapping
-    fun getTasks(model: Model): String {
+    fun getTasks(model: Model,
+                 @AuthenticationPrincipal user: UserDetails): String {
         val tasks = _taskRepository?.findAll() ?: emptyList()
-        model.addAttribute("tasks", tasks)
+        val userTasks = tasks.filter { it.owner == user.username }
+        model.addAttribute("tasks", userTasks)
         return "tasks_list"
     }
 
@@ -45,7 +47,10 @@ class TasksController {
 
     @PostMapping("/create")
     @ResponseBody
-    fun addTask(@RequestBody task: Task): HttpStatus {
+    fun addTask(@RequestBody task: Task,
+                @AuthenticationPrincipal user: UserDetails): HttpStatus {
+        println("attaching $task to ${user.username}")
+        task.owner = user.username
         _taskRepository?.save(task)
         return HttpStatus.CREATED
     }

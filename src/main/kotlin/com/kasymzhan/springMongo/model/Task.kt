@@ -12,6 +12,7 @@ data class Task(
     var description: String = "",
     var isDone: Boolean = false,
 ) {
+    var owner: String? = null
     val idString: String
         get() = id.toString()
 }
