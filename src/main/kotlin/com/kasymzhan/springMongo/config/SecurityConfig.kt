@@ -33,6 +33,7 @@ class SecurityConfig(val userDetailsService: CustomUserDetailsService) {
             logout {
                 logoutUrl = "/logout" // ???
             }
+            csrf { disable() }
         }
         return http.build()
     }
