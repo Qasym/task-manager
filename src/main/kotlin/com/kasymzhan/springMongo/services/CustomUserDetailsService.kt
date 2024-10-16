@@ -14,19 +14,13 @@ class CustomUserDetailsService(val userRepository: UserRepository) : UserDetails
     override fun loadUserByUsername(username: String?): UserDetails {
         if (username.isNullOrBlank())
             throw Exception("Provided username is null")
-        println("username is >$username<")
         val user = userRepository.findByUsername(username)
             ?: throw Exception("User: $username not found")
-        println("user $username is found")
-//        return User(
-//            user.username,
-//            user.password,
-//            user.roles.map { SimpleGrantedAuthority(it) })
+        println("user >$username< is found")
         val userDetails = User.withUsername(user.username)
             .password(user.password)
             .roles(user.roles.first())
             .build()
-        println("user details: $userDetails")
         return userDetails
     }
 }
