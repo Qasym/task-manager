@@ -25,6 +25,6 @@ You should be able to see things running app on http://localhost:8989/
 
 # Future todos
 - [x] ~~Add user authentication~~
-- [] Beautify front end part of the app
-- [] Categories for the tasks
-- [] Priorities for the tasks
+- [ ] Beautify front end part of the app
+- [ ] Categories for the tasks
+- [ ] Priorities for the tasks
